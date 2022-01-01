@@ -1,20 +1,18 @@
 pipeline{
-  agent {
-    docker {
-      image 'node:16.13.1-alpine'
-      args '-p 3000:3000'
-    }
+  agent any
+  tools {
+    git 'git'
+
   }
-  environment {
-    HOME = '.'
-  }
+    
   stages {
-    stage('Build') {
+    stage('prepare') {
       steps {
-        sh 'npm cache clear --force'
-        sh 'npm install'
+        sh "git --version"
+        git branch: 'master', credentialsId: 'Gitlab', url: ' https://github.com/korkt-kim/jenkins-vue.git'
       }
     }
+    
     stage('Test') {
       environment {
         CI = 'true'
